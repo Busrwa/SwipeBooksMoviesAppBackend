@@ -27,7 +27,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = [
+    'swipebooksmoviesappbackend.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    '192.168.0.13',
+]
 
 
 
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
     'kitaplar',
     'corsheaders',
 ]
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -89,13 +95,6 @@ DATABASES = {
     }
 }
 
-CORS_ALLOWED_ORIGINS = [
-    'https://swipebooksmoviesappbackend.onrender.com',
-    'http://192.168.0.13:3000',  # Frontend'in çalıştığı port neyse onu yaz
-    # veya geliştirirken
-    'http://localhost:3000',
-
-]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -145,3 +144,9 @@ MEDIA_URL = '/media/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = BASE_DIR / 'media'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
