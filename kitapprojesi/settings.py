@@ -22,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4j^0i_te@f7u8ab&8zb8$2odwig85)*%3u(@m6!2a(_5#7gia('
+SECRET_KEY = os.environ.get('django-insecure-4j^0i_te@f7u8ab&8zb8$2odwig85)*%3u(@m6!2a(_5#7gia(')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['kitapprojesi.onrender.com', 'localhost', '127.0.0.1']
+
 
 
 # Application definition
@@ -90,6 +91,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.0.13:3000',  # Frontend'in çalıştığı port neyse onu yaz
     # veya geliştirirken
     'http://localhost:3000',
+    'https://seninfrontendurl.onrender.com',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -129,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
