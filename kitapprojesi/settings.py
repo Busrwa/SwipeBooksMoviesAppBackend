@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,8 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'kitapprojesi.urls'
@@ -89,10 +90,11 @@ DATABASES = {
 }
 
 CORS_ALLOWED_ORIGINS = [
+    'https://swipebooksmoviesappbackend.onrender.com',
     'http://192.168.0.13:3000',  # Frontend'in çalıştığı port neyse onu yaz
     # veya geliştirirken
     'http://localhost:3000',
-    'https://swipebooksmoviesappbackend.onrender.com',
+
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
