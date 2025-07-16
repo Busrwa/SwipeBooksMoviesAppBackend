@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: kitapprojesi-backend
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: |
+      gunicorn kitapprojesi.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: kitapprojesi.onrender.com
+    autoDeploy: true
