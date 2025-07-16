@@ -92,7 +92,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.0.13:3000',  # Frontend'in çalıştığı port neyse onu yaz
     # veya geliştirirken
     'http://localhost:3000',
-    'https://seninfrontendurl.onrender.com',
+    'https://swipebooksmoviesappbackend.onrender.com',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
