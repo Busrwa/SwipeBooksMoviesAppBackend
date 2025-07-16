@@ -1,17 +1,17 @@
 services:
   - type: web
-    name: kitapprojesi-backend
+    name: SwipeBooksMoviesAppBackend
     env: python
+    runtime: python-3.12.6
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
       python manage.py migrate
-    startCommand: |
-      gunicorn kitapprojesi.wsgi:application --bind 0.0.0.0:$PORT
+    startCommand: gunicorn kitapprojesi.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
         value: False
       - key: SECRET_KEY
-        generateValue: true
+        value: your-secret-key
       - key: ALLOWED_HOSTS
-        value: kitapprojesi.onrender.com
+        value: '*'
