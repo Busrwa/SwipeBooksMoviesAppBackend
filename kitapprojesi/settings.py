@@ -12,29 +12,25 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = [
     'swipebooksmoviesappbackend.onrender.com',
-    'localhost',
-    '127.0.0.1',
-    '192.168.0.13',
 ]
-
-
+CORS_ALLOWED_ORIGINS = [
+    "https://swipebooksmoviesappbackend.onrender.com",
+]
 
 # Application definition
 
@@ -48,8 +44,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'kitaplar',
     'corsheaders',
+    'knox',  # Daha güvenli ve uzun ömürlü token tabanlı kimlik doğrulama sağlar.
+    'accounts',  # Özel kullanıcı modeli ve kimlik doğrulama işlemleri için projeye özgü bir uygulama.
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
 ]
-
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -84,19 +83,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kitapprojesi.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # SQLite kullanıyoruz
-        'NAME': BASE_DIR / 'db.sqlite3',         # Proje klasöründe dosya olarak
+        'NAME': BASE_DIR / 'db.sqlite3',  # Proje klasöründe dosya olarak
     }
 }
-
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -116,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -128,7 +122,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -139,14 +132,26 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 MEDIA_URL = '/media/'
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+KNOX_TOKEN_TTL = None  # Tokenların geçerlilik süresi
+KNOX_TOKEN_LIMIT_PER_USER = 10  # Kullanıcı başına maksimum token sayısı (isteğe bağlı)
+KNOX_REVOKE_TOKENS_ON_LOGOUT = True  # Kullanıcı çıkış yaparsa tokenları geçersiz kılar
+
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',  # Kullanıcı adı ve şifre ile temel kimlik doğrulama (genellikle dev/test için)
+        # 'rest_framework.authentication.SessionAuthentication',  # Django'nun oturum tabanlı kimlik doğrulaması (genellikle admin paneli için)
+        'knox.auth.TokenAuthentication',  # Knox kullanarak güvenli token tabanlı kimlik doğrulama sağlar.
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
+#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

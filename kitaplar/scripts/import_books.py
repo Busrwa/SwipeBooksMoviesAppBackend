@@ -21,17 +21,20 @@ def run():
         for row in reader:
             # Kontrol amaçlı her satırı yazdırmak istersen açabilirsin
             # print(f"Importing book: {row['title']} by {row['author_name']}")
-
+            isbn = row.get('isbn')
             author, _ = Author.objects.get_or_create(name=row['author_name'])
 
             publish_date = parse_date(row.get('publish_date', ''))
 
-            Book.objects.get_or_create(
-                title=row['title'],
-                author=author,
-                description=row.get('description', ''),
-                publish_date=publish_date,
-                cover_image_url=row.get('cover_image_url', '')
+            Book.objects.update_or_create(
+                isbn=row['isbn'],  # sadece ISBN lookup
+                defaults={
+                    "title": row['title'],
+                    "author": author,
+                    "description": row.get('description', ''),
+                    "publish_date": publish_date,
+                    "cover_image_url": row.get('cover_image_url', '')
+                }
             )
 
     print("Kitaplar başarıyla eklendi.")

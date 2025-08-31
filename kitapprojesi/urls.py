@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('kitaplar.urls')),  # API alt yolu
+    path('', include('kitaplar.urls')),  # API alt yolu
+    path('', include('accounts.urls')),
 ]
 
 if settings.DEBUG:
